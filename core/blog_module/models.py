@@ -1,11 +1,9 @@
-from django.contrib.auth.models import User
 from django.db import models
-
-
+from account_module.models import CustomUser
 
 class Post(models.Model):
     banner = models.ImageField(null=True, blank=True, upload_to='blog-banner')
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     text = models.TextField()
     category = models.ForeignKey('PostCategory', on_delete=models.SET_NULL, null=True)
