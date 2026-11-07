@@ -39,8 +39,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255, verbose_name="نام")
     last_name = models.CharField(max_length=255, verbose_name="نام خانوادگی")
     email = models.EmailField(max_length=255, unique=True, verbose_name="ایمیل")
+    username = models.CharField(max_length=50, verbose_name="نام کاربری")
     is_staff = models.BooleanField(default=False, verbose_name="کارمندی")
     is_superuser = models.BooleanField(default=False, verbose_name="کاربر با دسترسی کامل")
+    is_active = models.BooleanField(default=True, verbose_name="فعال / غیرفعال")
     date_joined = jDateTimeField(auto_now_add=True, verbose_name="تاریخ عضویت")
     edited_date = jDateTimeField(auto_now=True, verbose_name="تاریخ تغییر کاربر")
 
