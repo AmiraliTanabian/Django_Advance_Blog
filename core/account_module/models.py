@@ -36,15 +36,12 @@ class UserManager(BaseUserManager):
         return self.create_user(email=email,password=password, **extra_fields)
     
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    first_name = models.CharField(max_length=255, verbose_name="نام")
-    last_name = models.CharField(max_length=255, verbose_name="نام خانوادگی")
-    email = models.EmailField(max_length=255, unique=True, verbose_name="ایمیل")
-    username = models.CharField(max_length=50, verbose_name="نام کاربری")
-    is_staff = models.BooleanField(default=False, verbose_name="کارمندی")
-    is_superuser = models.BooleanField(default=False, verbose_name="کاربر با دسترسی کامل")
-    is_active = models.BooleanField(default=True, verbose_name="فعال / غیرفعال")
-    date_joined = jDateTimeField(auto_now_add=True, verbose_name="تاریخ عضویت")
-    edited_date = jDateTimeField(auto_now=True, verbose_name="تاریخ تغییر کاربر")
+    email = models.EmailField(max_length=255, unique=True)
+    username = models.CharField(max_length=50)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ("first_name", "last_name")
@@ -53,6 +50,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    class Meta:
-        verbose_name = "کاربر"
-        verbose_name_plural = "کاربران"
+class UserProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    avatar = models.ImageField(upload_to="user-profiles", blank=True, null=True)
+    bio = models.TextField(null=True, blank=True)
+    date_joined = jDateTimeField(auto_now_add=True)
+    edited_date = jDateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.email
+

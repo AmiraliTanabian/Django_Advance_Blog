@@ -1,18 +1,17 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from account_module.models import CustomUser
+from account_module.models import CustomUser, UserProfile
 from django.utils.translation import gettext_lazy as _
 
 
 class UserModelAdmin(UserAdmin):
     model = CustomUser
-    list_display = ("first_name", "last_name", "email", "username", "is_active", "is_superuser", "is_staff")
+    list_display = ( "email", "username", "is_active", "is_superuser", "is_staff")
     list_filter = ("is_active", "is_superuser", "is_staff")
     list_editable = ("is_superuser", "is_active")
     searching_fields = ("email", "username")
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name")}),
         (
             _("Permissions"),
             {
@@ -25,19 +24,13 @@ class UserModelAdmin(UserAdmin):
                 ),
             },
         ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined", "edited_date")}),
+        (_("Important dates"), {"fields": ("last_login",)}),
     )
     add_fieldsets = (
         (
             "Authentication",
             {
                 "fields": ("email", "password1", "password2"),
-            },
-        ),
-        (
-            "Personal Info",
-            {
-                "fields": ("first_name", "last_name", "username"),
             },
         ),
         (
@@ -49,6 +42,11 @@ class UserModelAdmin(UserAdmin):
         ),
     )
 
-    readonly_fields = ("last_login", "date_joined", "edited_date")
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "first_name", "last_name")
+    search_fields = ("user__email", "first_name", "last_name")
+    ordering = ("user__email",)
+
 
 admin.site.register(CustomUser, UserModelAdmin)
+admin.site.register(UserProfile, ProfileAdmin)

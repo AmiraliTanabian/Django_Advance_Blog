@@ -131,3 +131,6 @@ MAILERS = {
 }
 
 AUTH_USER_MODEL = "account_module.CustomUser"
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
